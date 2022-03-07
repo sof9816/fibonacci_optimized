@@ -6,6 +6,7 @@ class FibonacciBloc {
   late int counter;
   late int fibonacci;
   late bool isDoneCalculating;
+  late Map tableOfdata;
 
   final _counterStreamController = StreamController<int>();
   StreamSink<int> get counterSink => _counterStreamController.sink;
@@ -14,6 +15,10 @@ class FibonacciBloc {
   final _stateStreamController = StreamController<bool>();
   StreamSink<bool> get stateSink => _stateStreamController.sink;
   Stream<bool> get stateStream => _stateStreamController.stream;
+
+  final _tableStreamController = StreamController<Map>();
+  StreamSink<Map> get tableSink => _tableStreamController.sink;
+  Stream<Map> get tableStream => _tableStreamController.stream;
 
   final _fibonacciStreamController = StreamController<int>();
   StreamSink<int> get fibonacciSink => _fibonacciStreamController.sink;
@@ -26,21 +31,47 @@ class FibonacciBloc {
     counter = 0;
     fibonacci = 0;
     isDoneCalculating = true;
+    tableOfdata = {};
     //
     _eventStreamController.stream.listen(_mapingEvents);
   }
-
   // Old function
   fib(int n) {
     if (n < 2) return n;
     return fib(n - 1) + fib(n - 2);
   }
 
-  // optimized function
+  setTable(n, fib, status) {
+    tableOfdata[n] = {status: fib};
+  }
+
+  // Optimized function
   Future fibOptimized(int n) async {
-    if (n < 2) return n;
-    int fibonacci = await compute(loopFunction, n);
-    return fibonacci;
+    // Add new reference
+    setTable(n, 0, "Running");
+    tableSink.add(tableOfdata);
+    if (n < 2) {
+      // Add new reference
+      setTable(n, 0, "Finished");
+      tableSink.add(tableOfdata);
+      return n;
+    }
+    // Active loading
+    isDoneCalculating = false;
+    stateSink.add(isDoneCalculating);
+    // Compute fibonacci
+    compute(loopFunction, n).then((value) => {
+          // Set fibonacci value
+          fibonacci = value,
+          // Set table reference
+          setTable(n, fibonacci, "Finished"),
+          tableSink.add(tableOfdata),
+          // Stop loading
+          isDoneCalculating = true,
+          stateSink.add(isDoneCalculating),
+          // Display fibonacci value
+          fibonacciSink.add(fibonacci)
+        });
   }
 
   _mapingEvents(FibonacciEvent event) async {
@@ -49,17 +80,8 @@ class FibonacciBloc {
     }
     // Display counter value
     counterSink.add(counter);
-    //
-    // Active loading
-    isDoneCalculating = false;
-    stateSink.add(isDoneCalculating);
     // Initiate fibonacci function
-    fibonacci = await fibOptimized(counter);
-    // Stop loading
-    isDoneCalculating = true;
-    stateSink.add(isDoneCalculating);
-    // Display fibonacci value
-    fibonacciSink.add(fibonacci);
+    fibOptimized(counter);
   }
 
   void dispose() {
