@@ -1,6 +1,7 @@
 import 'package:fibonacci_optimized/fibonacci_bloc.dart';
 import 'package:fibonacci_optimized/fibonacci_event.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,7 +24,6 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
-
   final String title;
 
   @override
@@ -42,6 +42,29 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
           child: Column(
         children: [
+          Expanded(
+            flex: 1,
+            child: Center(
+              child: StreamBuilder(
+                stream: fibonacciBloc.stateStream,
+                initialData: true,
+                builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                  return Visibility(
+                    visible:
+                        !(snapshot.data ?? false), //calling when data changes
+                    child: const SizedBox(
+                      width: 50,
+                      height: 50,
+                      child: LoadingIndicator(
+                        indicatorType: Indicator.lineSpinFadeLoader,
+                        strokeWidth: 2,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
           Expanded(
             flex: 10,
             child: Column(
