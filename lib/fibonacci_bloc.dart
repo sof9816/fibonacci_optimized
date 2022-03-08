@@ -54,7 +54,8 @@ class FibonacciBloc {
       // Add new reference
       setTable(n, 0, "Finished");
       tableSink.add(tableOfdata);
-      return n;
+      fibonacci = n;
+      fibonacciSink.add(fibonacci);
     }
     // Active loading
     isDoneCalculating = false;

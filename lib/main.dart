@@ -32,9 +32,10 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final fibonacciBloc = FibonacciBloc();
-  final ScrollController _scrollController = new ScrollController();
+  final ScrollController _scrollController = ScrollController();
   final textStyle = const TextStyle(fontSize: 20, color: Colors.black);
   final textStyle1 = const TextStyle(fontSize: 20, color: Colors.white);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,9 +75,16 @@ class _MyHomePageState extends State<MyHomePage> {
                   stream: fibonacciBloc.counterStream,
                   initialData: 0,
                   builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
-                    return Text(
-                      'Calculatin Fibonacci for: ${snapshot.data}',
-                      style: Theme.of(context).textTheme.headline6,
+                    return Container(
+                      padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                      margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.blueAccent),
+                      child: Text(
+                        'Calculatin Fibonacci for: ${snapshot.data}',
+                        style: textStyle1,
+                      ),
                     );
                   },
                 ),
@@ -84,9 +92,16 @@ class _MyHomePageState extends State<MyHomePage> {
                   stream: fibonacciBloc.fibonacciStream,
                   initialData: 0,
                   builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
-                    return Text(
-                      '${snapshot.data}',
-                      style: Theme.of(context).textTheme.headline5,
+                    return Container(
+                      padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                      margin: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.blueAccent),
+                      child: Text(
+                        '${snapshot.data}',
+                        style: textStyle1,
+                      ),
                     );
                   },
                 ),
