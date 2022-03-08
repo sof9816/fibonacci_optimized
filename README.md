@@ -1,16 +1,21 @@
-# fibonacci_optimized
+# Fibonacci Optimized 🎯
 
-A new Flutter project.
+Some computations are naturally time-consuming and have very little room for optimization, such as the Fibonacci sequence; knowing this, the standard way of doing things in Flutter can be slow and jittery as everything is being processed in an event loop.
 
-## Getting Started
+## What has been done 😄
 
-This project is a starting point for a Flutter application.
+- A single page app that has counter and a fibonacci value of that counter.✅
+- **Bloc** was used in the project✅
+- Using an **optimized** function to calculate the **fibonacci** with loops.✅
+- Making the function work in background using **Isolate** and **compute** function. ✅
+- Adding loading indicator for the function in the UI.✅
+- Table of the data that is going through the process was maintained in a map with a status of the **fibonacci** background operation. ✅
 
-A few resources to get you started if this is your first Flutter project:
+➕ Plus:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+- Adding CI for the project using github actions.✅
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+___
+
+A small article i made about this, hope you like it 😊
+[Faster Fibonacci](https://sof9816.medium.com/faster-fibonacci-efde16a7d312)
