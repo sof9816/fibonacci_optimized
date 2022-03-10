@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 
 class FibonacciBloc {
   late int counter;
-  late int fibonacci;
+  late BigInt fibonacci;
   late bool isDoneCalculating;
   late Map tableOfdata;
 
@@ -20,16 +20,16 @@ class FibonacciBloc {
   StreamSink<Map> get tableSink => _tableStreamController.sink;
   Stream<Map> get tableStream => _tableStreamController.stream;
 
-  final _fibonacciStreamController = StreamController<int>();
-  StreamSink<int> get fibonacciSink => _fibonacciStreamController.sink;
-  Stream<int> get fibonacciStream => _fibonacciStreamController.stream;
+  final _fibonacciStreamController = StreamController<BigInt>();
+  StreamSink<BigInt> get fibonacciSink => _fibonacciStreamController.sink;
+  Stream<BigInt> get fibonacciStream => _fibonacciStreamController.stream;
 
   final _eventStreamController = StreamController<FibonacciEvent>();
   Sink<FibonacciEvent> get eventSink => _eventStreamController.sink;
 
   FibonacciBloc() {
     counter = 0;
-    fibonacci = 0;
+    fibonacci = BigInt.from(0);
     isDoneCalculating = true;
     tableOfdata = {};
     //
@@ -54,7 +54,7 @@ class FibonacciBloc {
       // Add new reference
       setTable(n, 0, "Finished");
       tableSink.add(tableOfdata);
-      fibonacci = n;
+      fibonacci = BigInt.from(n);
       fibonacciSink.add(fibonacci);
     }
     // Active loading
@@ -93,10 +93,13 @@ class FibonacciBloc {
   }
 }
 
-int loopFunction(n) {
-  var data = [0, 1];
+BigInt loopFunction(n) {
+  var data = [BigInt.zero, BigInt.one];
   for (var i = 2; i < n + 1; i++) {
-    data.add(data[i - 1] + data[i - 2]);
+    BigInt num1 = data[i - 1];
+    BigInt num2 = data[i - 2];
+
+    data.add(num1 + num2);
   }
   return data[data.length - 1];
 }

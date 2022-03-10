@@ -33,9 +33,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final fibonacciBloc = FibonacciBloc();
   final ScrollController _scrollController = ScrollController();
-  final textStyle = const TextStyle(fontSize: 20, color: Colors.black);
-  final textStyle1 = const TextStyle(fontSize: 20, color: Colors.white);
-
+  final textStyle = const TextStyle(fontSize: 18, color: Colors.white);
+  final textStyle1 = const TextStyle(fontSize: 16, color: Colors.black);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,15 +82,16 @@ class _MyHomePageState extends State<MyHomePage> {
                           color: Colors.blueAccent),
                       child: Text(
                         'Calculatin Fibonacci for: ${snapshot.data}',
-                        style: textStyle1,
+                        style: textStyle,
                       ),
                     );
                   },
                 ),
                 StreamBuilder(
                   stream: fibonacciBloc.fibonacciStream,
-                  initialData: 0,
-                  builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+                  initialData: BigInt.from(0),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<BigInt> snapshot) {
                     return Container(
                       padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
                       margin: const EdgeInsets.fromLTRB(20, 5, 20, 5),
@@ -99,8 +99,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           borderRadius: BorderRadius.circular(20),
                           color: Colors.blueAccent),
                       child: Text(
-                        '${snapshot.data}',
-                        style: textStyle1,
+                        '${snapshot.data?.toInt()}',
+                        style: textStyle,
                       ),
                     );
                   },
@@ -138,35 +138,42 @@ class _MyHomePageState extends State<MyHomePage> {
                             item.toString().split("{")[1].split(":")[0];
                         final fib =
                             item.toString().split(": ")[1].split("}")[0];
-                        return Container(
-                          padding: const EdgeInsets.all(5),
-                          margin: const EdgeInsets.all(5),
-                          child: Row(
-                            children: [
-                              Text(
-                                "${index + 1}: ",
-                                style: textStyle,
-                              ),
-                              Text(
-                                fib,
-                                style: textStyle,
-                              ),
-                              Container(
-                                padding:
-                                    const EdgeInsets.fromLTRB(15, 5, 15, 5),
-                                margin: const EdgeInsets.fromLTRB(15, 5, 15, 5),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: status == "Running"
-                                      ? Colors.yellow[700]
-                                      : Colors.green[500],
-                                ),
-                                child: Text(
-                                  status,
+                        return Flexible(
+                          child: Container(
+                            padding: const EdgeInsets.all(5),
+                            margin: const EdgeInsets.all(5),
+                            child: Row(
+                              children: [
+                                Text(
+                                  "${index + 1}: ",
                                   style: textStyle1,
                                 ),
-                              ),
-                            ],
+                                Flexible(
+                                  child: Text(
+                                    fib,
+                                    style: textStyle1,
+                                  ),
+                                ),
+                                Container(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(5, 5, 5, 5),
+                                    margin:
+                                        const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: status == "Running"
+                                          ? Colors.yellow[700]
+                                          : Colors.green[500],
+                                    ),
+                                    child: Icon(
+                                      status == "Running"
+                                          ? Icons.timer
+                                          : Icons.done,
+                                      color: Colors.white,
+                                      size: 20,
+                                    )),
+                              ],
+                            ),
                           ),
                         );
                       },
